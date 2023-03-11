@@ -60,6 +60,9 @@
 		<dependency>
 			<groupId>com.h2database</groupId>
 			<artifactId>h2</artifactId>
+			<!-- As per Spring initialzr but works without, probably Default!!!!
+			<scope>runtime</scope>
+			-->
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
