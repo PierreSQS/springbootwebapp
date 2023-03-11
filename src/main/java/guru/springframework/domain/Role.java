@@ -1,11 +1,10 @@
 package guru.springframework.domain;
 
-import guru.springframework.domain.AbstractDomainClass;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
 import java.util.ArrayList;
 import java.util.List;
 

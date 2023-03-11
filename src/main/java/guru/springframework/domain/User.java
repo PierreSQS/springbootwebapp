@@ -1,13 +1,15 @@
 package guru.springframework.domain;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by jt on 12/14/15.
  */
+// USER is a reserved word in H2 2.2.214!!!!
 @Entity
+@Table(name = "jtuser")
 public class User extends AbstractDomainClass  {
 
     private String username;

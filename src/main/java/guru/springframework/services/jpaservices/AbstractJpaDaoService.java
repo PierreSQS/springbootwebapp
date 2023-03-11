@@ -1,7 +1,7 @@
 package guru.springframework.services.jpaservices;
 
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.PersistenceUnit;
+import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.PersistenceUnit;
 
 /**
  * Created by jt on 12/14/15.

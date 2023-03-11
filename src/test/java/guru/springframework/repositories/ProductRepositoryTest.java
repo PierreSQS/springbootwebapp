@@ -1,31 +1,22 @@
 package guru.springframework.repositories;
 
-import guru.springframework.configuration.RepositoryConfiguration;
 import guru.springframework.domain.Product;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import java.math.BigDecimal;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
+import static org.junit.jupiter.api.Assertions.*;
 
-@ExtendWith(SpringExtension.class)
 @DataJpaTest
-public class ProductRepositoryTest {
+class ProductRepositoryTest {
 
     @Autowired
-    private ProductRepository productRepository;
+    ProductRepository productRepository;
 
     @Test
-    public void testSaveProduct(){
+    void testSaveProduct(){
         //setup product
         Product product = new Product();
         product.setDescription("Spring Framework Guru Shirt");
@@ -53,21 +44,15 @@ public class ProductRepositoryTest {
 
         //get from DB, should be updated
         Product fetchedUpdatedProduct = productRepository.findById(fetchedProduct.getId()).orElse(null);
+        assert fetchedUpdatedProduct != null;
         assertEquals(fetchedProduct.getDescription(), fetchedUpdatedProduct.getDescription());
 
         //verify count of products in DB
         long productCount = productRepository.count();
-        assertEquals(productCount, 1);
+        assertEquals(1, productCount);
 
-        //get all products, list should only have one
-        Iterable<Product> products = productRepository.findAll();
+        long count = productRepository.count();
 
-        int count = 0;
-
-        for(Product p : products){
-            count++;
-        }
-
-        assertEquals(count, 1);
+        assertEquals(1, count);
     }
 }
