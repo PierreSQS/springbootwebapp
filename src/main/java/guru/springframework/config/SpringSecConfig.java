@@ -21,7 +21,6 @@ public class SpringSecConfig {
     @Bean("daoAuthenticationProvider")
     public AuthenticationProvider daoAuthenticationProvider(UserDetailsService userDetailsService) {
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
-        provider.setPasswordEncoder(new BCryptPasswordEncoder());
         provider.setUserDetailsService(userDetailsService);
         return provider;
     }
