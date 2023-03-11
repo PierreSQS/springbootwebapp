@@ -1,5 +1,6 @@
 package guru.springframework.config;
 
+import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -29,7 +30,8 @@ public class SpringSecConfig {
     protected SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
            httpSecurity
                 .authorizeHttpRequests()
-                   .requestMatchers("/","/products","/product/show/*","/console/*","/h2-console/**").permitAll()
+                   .requestMatchers(PathRequest.toH2Console()).permitAll()
+                   .requestMatchers("/","/products","/product/show/*").permitAll()
                 .anyRequest().authenticated()
                 .and()
                     .formLogin().loginPage("/login").permitAll()
@@ -37,7 +39,7 @@ public class SpringSecConfig {
                     .logout().permitAll();
 
         httpSecurity.csrf().disable();
-        httpSecurity.headers().frameOptions().disable();
+        httpSecurity.headers().frameOptions().sameOrigin();
 
         return httpSecurity.build();
     }
