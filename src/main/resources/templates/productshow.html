@@ -4,11 +4,11 @@
 
     <title>Spring Framework Guru</title>
 
-    <!--/*/ <th:block th:include="fragments/headerinc :: head"></th:block> /*/-->
+    <!--/*/ <th:block th:insert="~{fragments/headerinc :: head}"></th:block> /*/-->
 </head>
 <body>
 <div class="container">
-    <!--/*/ <th:block th:include="fragments/header :: header"></th:block> /*/-->
+    <!--/*/ <th:block th:insert="~{fragments/header :: header}"></th:block> /*/-->
 
      <form class="form-horizontal" th:action="@{/logout}" method="post">
         <div class="form-group">

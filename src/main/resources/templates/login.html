@@ -2,11 +2,11 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
      <title>Login Form</title>
-    <!--/*/ <th:block th:include="fragments/headerinc :: head"></th:block> /*/-->
+    <!--/*/ <th:block th:insert="~{fragments/headerinc :: head}"></th:block> /*/-->
 </head>
 <body>
 <div class="container">
-    <!--/*/ <th:block th:include="fragments/header :: header"></th:block> /*/-->
+    <!--/*/ <th:block th:insert="~{fragments/header :: header}"></th:block> /*/-->
 <div th:if="${param.error}">
     <label style="color:red">Invalid username and password.</label>
 </div>
