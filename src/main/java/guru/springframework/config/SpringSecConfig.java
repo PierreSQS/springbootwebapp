@@ -39,7 +39,6 @@ public class SpringSecConfig {
                 .and()
                     .logout().permitAll();
 
-        httpSecurity.csrf().disable();
         httpSecurity.headers().frameOptions().sameOrigin();
 
         return httpSecurity.build();

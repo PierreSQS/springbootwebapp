@@ -55,7 +55,7 @@ class ProductControllerTest {
 
     @Test
     @WithMockUser(username = "MockUser")
-    void list() throws Exception {
+    void listUserAuthenticated() throws Exception {
         // Given
         given(productServMock.listAllProducts()).willReturn(List.of(product1,product2));
 
@@ -110,11 +110,11 @@ class ProductControllerTest {
      * Now the test passes
      */
     @Test
-    @WithMockUser(username = "MockUser")
     void login() throws Exception {
         mockMvc.perform(get("/login"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("login"))
+                .andExpect(content().string(containsString("<title>Login Form</title>")))
                 .andDo(print());
     }
 }
