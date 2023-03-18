@@ -114,7 +114,14 @@ class ProductControllerTest {
     }
 
     @Test
-    void saveProduct() {
+    @WithMockUser(username = "MockUser")
+    void saveProduct() throws Exception {
+        mockMvc.perform(get("/product/new"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("productform"))
+                .andExpect(model().attributeExists("product"))
+                .andExpect(content().string(containsString("Product Create/Update")))
+                .andDo(print());
     }
 
     @Test
