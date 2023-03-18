@@ -59,7 +59,16 @@ class ProductControllerTest {
     }
 
     @Test
-    void newProduct() {
+    @WithMockUser(username = "MockUser")
+    void newProduct() throws Exception {
+        // When, Then
+        mockMvc.perform(get("/product/new"))
+                .andExpect(status().isOk())
+                .andExpect(model().attributeExists("product"))
+                .andExpect(content().string(containsString("<span>Welcome <span>MockUser</span></span>")))
+                .andExpect(content().string(containsString("Product Create/Update")))
+                .andExpect(view().name("productform"))
+                .andDo(print());
     }
 
     @Test
