@@ -51,10 +51,6 @@ class ProductControllerTest {
     }
 
     @Test
-    void setProductService() {
-    }
-
-    @Test
     @WithMockUser(username = "MockUser")
     void listUserAuthenticated() throws Exception {
         // Given
