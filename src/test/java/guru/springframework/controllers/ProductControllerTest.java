@@ -16,6 +16,7 @@ import java.util.List;
 
 import static org.hamcrest.Matchers.containsString;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
@@ -71,7 +72,17 @@ class ProductControllerTest {
     }
 
     @Test
-    void showProduct() {
+    void showProduct() throws Exception {
+        // Given
+        given(productServMock.getProductById(anyInt())).willReturn(product1);
+
+        // When, Then
+        mockMvc.perform(get("/product/show/{id}",1))
+                .andExpect(status().isOk())
+                .andExpect(view().name("productshow"))
+                .andExpect(model().attributeExists("product"))
+                .andExpect(content().string(containsString("Product Details")))
+                .andDo(print());
     }
 
     @Test
