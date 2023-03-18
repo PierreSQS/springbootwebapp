@@ -16,6 +16,7 @@ import static org.hamcrest.Matchers.containsString;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -81,8 +82,9 @@ class ProductControllerTest {
     @Test
     @WithMockUser(username = "MockUser")
     void deleteTest() throws Exception {
-        mockMvc.perform(delete("/product/delete/{id}",1))
-                .andExpect(status().isOk())
+        mockMvc.perform(delete("/product/delete/{id}",1).with(csrf()))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(view().name("redirect:/products"))
                 .andDo(print());
 
         verify(productServMock).deleteProduct(any());
