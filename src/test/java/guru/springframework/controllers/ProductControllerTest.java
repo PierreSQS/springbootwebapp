@@ -1,5 +1,6 @@
 package guru.springframework.controllers;
 
+import guru.springframework.config.SpringSecConfig;
 import guru.springframework.domain.Product;
 import guru.springframework.services.ProductService;
 import org.junit.jupiter.api.BeforeEach;
@@ -7,18 +8,23 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Import;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
 
 import static org.hamcrest.Matchers.containsString;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(ProductController.class)
+@Import(SpringSecConfig.class)
 class ProductControllerTest {
 
     @Autowired
@@ -76,7 +82,13 @@ class ProductControllerTest {
     }
 
     @Test
-    void delete() {
+    @WithMockUser(username = "MockUser")
+    void deleteTest() throws Exception {
+        mockMvc.perform(delete("/product/delete/{id}",1))
+                .andExpect(status().isOk())
+                .andDo(print());
+
+        verify(productServMock).deleteProduct(any());
     }
 
     @Test
