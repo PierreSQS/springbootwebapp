@@ -20,8 +20,7 @@ import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -112,7 +111,7 @@ class ProductControllerTest {
     @Test
     @WithMockUser(username = "MockUser")
     void saveProduct() throws Exception {
-        mockMvc.perform(get("/product/new"))
+        mockMvc.perform(post("/product/new").with(csrf()))
                 .andExpect(status().isOk())
                 .andExpect(view().name("productform"))
                 .andExpect(model().attributeExists("product"))

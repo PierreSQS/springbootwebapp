@@ -2,24 +2,22 @@ package guru.springframework.controllers;
 
 import guru.springframework.domain.Product;
 import guru.springframework.services.ProductService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 
 @Controller
 public class ProductController {
 
-    private ProductService productService;
+    private final ProductService productService;
 
-    @Autowired
-    public void setProductService(ProductService productService) {
+    public ProductController(ProductService productService) {
         this.productService = productService;
     }
 
-    @RequestMapping(value = "/products", method = RequestMethod.GET)
+    @GetMapping ("/products")
     public String list(Model model){
         model.addAttribute("products", productService.listAllProducts());
         return "products";
@@ -43,7 +41,7 @@ public class ProductController {
         return "productform";
     }
 
-    @RequestMapping(value = "product", method = RequestMethod.POST)
+    @GetMapping("product")
     public String saveProduct(Product product){
         productService.saveProduct(product);
         return "redirect:/product/show/" + product.getId();
@@ -55,7 +53,7 @@ public class ProductController {
         return "redirect:/products";
     }
 
-    @RequestMapping(value = "/login", method = RequestMethod.GET)
+    @GetMapping("/login")
     public String login(){
          return "login";
     }
