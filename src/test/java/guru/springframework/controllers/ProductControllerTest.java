@@ -86,7 +86,18 @@ class ProductControllerTest {
     }
 
     @Test
-    void edit() {
+    @WithMockUser(username = "MockUser")
+    void edit() throws Exception {
+        // Given
+        given(productServMock.getProductById(anyInt())).willReturn(product1);
+
+        // When, Then
+        mockMvc.perform(get("/product/edit/{id}",1))
+                .andExpect(status().isOk())
+                .andExpect(view().name("productform"))
+                .andExpect(model().attributeExists("product"))
+                .andExpect(content().string(containsString("Product Create/Update")))
+                .andDo(print());
     }
 
     @Test
