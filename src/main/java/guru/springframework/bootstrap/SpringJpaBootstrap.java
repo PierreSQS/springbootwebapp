@@ -8,41 +8,30 @@ import guru.springframework.services.RoleService;
 import guru.springframework.services.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationListener;
-import org.springframework.context.event.ContextRefreshedEvent;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
 import java.util.List;
 
 @Component
-public class SpringJpaBootstrap implements ApplicationListener<ContextRefreshedEvent> {
+public class SpringJpaBootstrap implements CommandLineRunner {
 
-    private ProductRepository productRepository;
-    private UserService userService;
-    private RoleService roleService;
+    private final ProductRepository productRepository;
+    private final UserService userService;
+    private final RoleService roleService;
 
     private Logger log = LoggerFactory.getLogger(SpringJpaBootstrap.class);
 
-    @Autowired
-    public void setProductRepository(ProductRepository productRepository) {
+    public SpringJpaBootstrap(ProductRepository productRepository, UserService userService, RoleService roleService) {
         this.productRepository = productRepository;
-    }
-
-    @Autowired
-    public void setUserService(UserService userService) {
         this.userService = userService;
-    }
-
-    @Autowired
-    public void setRoleService(RoleService roleService) {
         this.roleService = roleService;
     }
 
 
     @Override
-    public void onApplicationEvent(ContextRefreshedEvent event) {
+    public void run(String... args) {
         loadProducts();
         loadUsers();
         loadRoles();
@@ -58,7 +47,7 @@ public class SpringJpaBootstrap implements ApplicationListener<ContextRefreshedE
         shirt.setProductId("235268845711068308");
         productRepository.save(shirt);
 
-        log.info("Saved Shirt - id: " + shirt.getId());
+        log.info("Saved Shirt - id: {}",shirt.getId());
 
         Product mug = new Product();
         mug.setDescription("Spring Framework Guru Mug");
@@ -67,7 +56,7 @@ public class SpringJpaBootstrap implements ApplicationListener<ContextRefreshedE
         mug.setPrice(new BigDecimal("11.95"));
         productRepository.save(mug);
 
-        log.info("Saved Mug - id:" + mug.getId());
+        log.info("Saved Mug - id: {}",mug.getId());
     }
 
     private void loadUsers() {
@@ -87,11 +76,11 @@ public class SpringJpaBootstrap implements ApplicationListener<ContextRefreshedE
         Role role = new Role();
         role.setRole("USER");
         roleService.saveOrUpdate(role);
-        log.info("Saved role" + role.getRole());
+        log.info("Saved role{}",role.getRole());
         Role adminRole = new Role();
         adminRole.setRole("ADMIN");
         roleService.saveOrUpdate(adminRole);
-        log.info("Saved role" + adminRole.getRole());
+        log.info("Saved role{}",adminRole.getRole());
     }
     private void assignUsersToUserRole() {
         List<Role> roles = (List<Role>) roleService.listAll();
