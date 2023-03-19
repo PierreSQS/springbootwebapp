@@ -29,7 +29,9 @@ public class SpringSecConfig {
 
     @Bean
     protected SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
-           httpSecurity
+           // ignore CSRF for H2-Console
+           httpSecurity.csrf().ignoringRequestMatchers(PathRequest.toH2Console())
+                .and()
                 .authorizeHttpRequests()
                    .requestMatchers(PathRequest.toH2Console()).permitAll()
                    .requestMatchers("/","/products","/product/show/*").permitAll()
