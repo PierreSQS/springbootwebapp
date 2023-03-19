@@ -1,5 +1,6 @@
 package guru.springframework.controllers;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import guru.springframework.domain.Product;
 import guru.springframework.services.ProductService;
 import org.junit.jupiter.api.BeforeEach;
@@ -8,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -30,6 +32,9 @@ class ProductControllerTest {
 
     @Autowired
     MockMvc mockMvc;
+
+    @Autowired
+    ObjectMapper objectMapper;
 
     @MockBean
     ProductService productServMock;
@@ -111,11 +116,18 @@ class ProductControllerTest {
     @Test
     @WithMockUser(username = "MockUser")
     void saveProduct() throws Exception {
-        mockMvc.perform(post("/product/new").with(csrf()))
-                .andExpect(status().isOk())
-                .andExpect(view().name("productform"))
-                .andExpect(model().attributeExists("product"))
-                .andExpect(content().string(containsString("Product Create/Update")))
+        // Given
+        Product savedProduct1 = product1;
+        product1.setId(1);
+        System.out.println("+++++ the product-ID: "+savedProduct1.getId());
+//        given(productServMock.saveProduct(any())).willReturn(savedProduct1);
+
+        // When, Then
+        mockMvc.perform(post("/product").with(csrf())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(product1)))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(view().name("redirect:/product/show/"+savedProduct1.getId()))
                 .andDo(print());
     }
 
