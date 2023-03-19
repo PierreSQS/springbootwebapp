@@ -1,6 +1,5 @@
 package guru.springframework.controllers;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import guru.springframework.domain.Product;
 import guru.springframework.services.ProductService;
 import org.junit.jupiter.api.BeforeEach;
@@ -12,6 +11,8 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -32,9 +33,6 @@ class ProductControllerTest {
 
     @Autowired
     MockMvc mockMvc;
-
-    @Autowired
-    ObjectMapper objectMapper;
 
     @MockBean
     ProductService productServMock;
@@ -119,16 +117,21 @@ class ProductControllerTest {
         // Given
         Product savedProduct1 = product1;
         product1.setId(1);
-        System.out.println("+++++ the product-ID: "+savedProduct1.getId());
-//        given(productServMock.saveProduct(any())).willReturn(savedProduct1);
+
+        MultiValueMap<String,String> multiValueMap = new LinkedMultiValueMap<>();
+        multiValueMap.add("id",savedProduct1.getId().toString());
+        multiValueMap.add("description",savedProduct1.getDescription());
+        multiValueMap.add("price",savedProduct1.getPrice().toString());
 
         // When, Then
         mockMvc.perform(post("/product").with(csrf())
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(product1)))
+                        .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                        .params(multiValueMap))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name("redirect:/product/show/"+savedProduct1.getId()))
                 .andDo(print());
+
+        verify(productServMock).saveProduct(any());
     }
 
     @Test
