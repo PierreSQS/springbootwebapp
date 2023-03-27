@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Predicate;
 
 /**
  * Created by jt on 12/14/15.
@@ -54,14 +53,11 @@ public class UserServiceMapImpl extends AbstractMapService implements UserServic
     @Override
     public User findByUsername(String userName) {
 
-        Optional returnUser =  domainMap.values().stream().filter(new Predicate<DomainObject>() {
-            @Override
-            public boolean test(DomainObject domainObject) {
-                User user = (User) domainObject;
-                return user.getUsername().equalsIgnoreCase(userName);
-            }
+        Optional<DomainObject> returnUser =  domainMap.values().stream().filter(domainObject -> {
+            User user = (User) domainObject;
+            return user.getUsername().equalsIgnoreCase(userName);
         }).findFirst();
 
-        return (User) returnUser.get();
+        return (User) returnUser.orElse(null);
     }
 }

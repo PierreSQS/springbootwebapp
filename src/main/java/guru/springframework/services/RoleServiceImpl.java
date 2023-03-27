@@ -2,7 +2,6 @@ package guru.springframework.services;
 
 import guru.springframework.domain.Role;
 import guru.springframework.repositories.RoleRepository;
-import guru.springframework.services.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
@@ -30,7 +29,7 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     public Role getById(Integer id) {
-        return roleRepository.findById(id).get();
+        return roleRepository.findById(id).orElse(null);
     }
 
     @Override

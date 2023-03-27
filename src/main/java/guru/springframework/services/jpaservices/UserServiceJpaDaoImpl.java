@@ -26,47 +26,54 @@ public class UserServiceJpaDaoImpl extends AbstractJpaDaoService implements User
 
     @Override
     public List<?> listAll() {
-        EntityManager em = emf.createEntityManager();
+        try (EntityManager em = emf.createEntityManager()) {
+            return em.createQuery("from User", User.class).getResultList();
+        }
 
-        return em.createQuery("from User", User.class).getResultList();
+
     }
 
     @Override
     public User getById(Integer id) {
-        EntityManager em = emf.createEntityManager();
-
-        return em.find(User.class, id);
+        try(EntityManager em = emf.createEntityManager()) {
+            return em.find(User.class, id);
+        }
     }
 
     @Override
     public User saveOrUpdate(User domainObject) {
-        EntityManager em = emf.createEntityManager();
+        try(EntityManager em = emf.createEntityManager()) {
+            em.getTransaction().begin();
 
-        em.getTransaction().begin();
+            if(domainObject.getPassword() != null){
+                domainObject.setEncryptedPassword(encryptionService.encryptString(domainObject.getPassword()));
+            }
 
-        if(domainObject.getPassword() != null){
-            domainObject.setEncryptedPassword(encryptionService.encryptString(domainObject.getPassword()));
+            User saveduser = em.merge(domainObject);
+            em.getTransaction().commit();
+
+            return saveduser;
         }
 
-        User saveduser = em.merge(domainObject);
-        em.getTransaction().commit();
-
-        return saveduser;
     }
 
     @Override
     public void delete(Integer id) {
-        EntityManager em = emf.createEntityManager();
+        try(EntityManager em = emf.createEntityManager()) {
+            em.getTransaction().begin();
+            em.remove(em.find(User.class, id));
+            em.getTransaction().commit();
+        }
 
-        em.getTransaction().begin();
-        em.remove(em.find(User.class, id));
-        em.getTransaction().commit();
     }
 
     @Override
     public User findByUsername(String userName) {
-        EntityManager em = emf.createEntityManager();
+        try(EntityManager em = emf.createEntityManager()) {
+            return em.createQuery("from User where userName = :userName", User.class)
+                    .setParameter("userName", userName)
+                    .getSingleResult();
+        }
 
-        return em.createQuery("from User where userName = :userName", User.class).setParameter("userName", userName).getSingleResult();
     }
 }
