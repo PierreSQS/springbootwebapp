@@ -1,9 +1,7 @@
 package guru.springframework.services;
 
 import guru.springframework.domain.User;
-
 import guru.springframework.repositories.UserRepository;
-import guru.springframework.services.UserService;
 import guru.springframework.services.security.EncryptionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
@@ -41,7 +39,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User getById(Integer id) {
-        return userRepository.findById(id).get();
+        return userRepository.findById(id).orElse(null);
     }
 
     @Override
