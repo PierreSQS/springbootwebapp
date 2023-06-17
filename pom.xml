@@ -14,7 +14,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.0.4</version>
+		<version>3.1.0</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 
@@ -58,12 +58,18 @@
 		</dependency>
 		<!-- end of webjars -->
 
+		<!-- prevent CVE Warning -->
+		<dependency>
+			<groupId>org.yaml</groupId>
+			<artifactId>snakeyaml</artifactId>
+			<version>2.0</version>
+		</dependency>
+
+
 		<dependency>
 			<groupId>com.h2database</groupId>
 			<artifactId>h2</artifactId>
-			<!-- As per Spring initialzr but works without, probably Default!!!!
 			<scope>runtime</scope>
-			-->
 		</dependency>
 
 		<!-- Spring Test Dependencies with Spring Security -->
