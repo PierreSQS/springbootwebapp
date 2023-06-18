@@ -8,6 +8,6 @@ RUN sed -i 's|#baseurl=http://mirror.centos.org|baseurl=http://vault.centos.org|
 RUN yum install -y java-17-openjdk
 
 VOLUME /tmp
-ADD /spring-boot-web-0.0.1SNAPSHOT.jar myapp.jar
+ADD /target/spring-boot-web-0.0.1-SNAPSHOT.jar myapp.jar
 RUN sh -c 'touch /myapp.jar'
 ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom","-jar","/myapp.jar"]
